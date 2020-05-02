@@ -1,0 +1,9 @@
+<launch>
+  <node pkg="keyboard_interrupt" type="keyboard_interrupt.py" 
+        name="keyboard_interrupt" output="screen" >
+    <rosparam>
+      key_trigger: ' '
+      key_abort: 'x'
+    </rosparam>
+  </node>
+</launch>
