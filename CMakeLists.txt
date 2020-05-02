@@ -9,8 +9,8 @@ project(keyboard_interrupt)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   rospy
-  message_generation
   std_msgs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -104,7 +104,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES keyboard_interrupt
-#  CATKIN_DEPENDS rospy
+ CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )
 

@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-import rospy
+import rospy, binascii
 
-from geometry_msgs.msg import Twist
-from std_msgs.msg import Bool
+from keyboard_interrupt.msg import Key
 
 import sys, select, termios, tty
 
@@ -12,24 +11,22 @@ def getKey():
     select.select([sys.stdin], [], [], 0)
     key = sys.stdin.read(1)
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-    return key
+    return key.encode('hex')
 
 if __name__=="__main__":
     settings = termios.tcgetattr(sys.stdin)
 
-    pub = rospy.Publisher('/keyboard_interrupt/key_pressed', Bool, queue_size = 1)
     rospy.init_node('keyboard_interrupt')
-    key = rospy.get_param("/keyboard_interrupt/key", " ")
+    pub = rospy.Publisher('/keyboard_interrupt/key', Key, queue_size = 1)
     
-    key_pressed = Bool() 
+    rospy.loginfo("Press \"Esc\" key to close this node")
+    key = Key()
     try:
         while not rospy.is_shutdown():
-            this_key = getKey()
-            if this_key == key:
-                key_pressed.data = True
-                pub.publish(key_pressed)
-                key_pressed.data = False
-            elif this_key == '\x03':
+            key.code = int(getKey(), 16)
+            key.header.stamp = rospy.Time.now()
+            pub.publish(key)
+            if key.code == Key.KEY_ESCAPE:
                 break
     
     except Exception as e:
