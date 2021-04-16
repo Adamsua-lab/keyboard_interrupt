@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy, binascii
 
@@ -11,7 +11,7 @@ def getKey():
     select.select([sys.stdin], [], [], 0)
     key = sys.stdin.read(1)
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-    return key.encode('hex')
+    return binascii.hexlify(bytes(key, 'utf-8'))
 
 if __name__=="__main__":
     settings = termios.tcgetattr(sys.stdin)
