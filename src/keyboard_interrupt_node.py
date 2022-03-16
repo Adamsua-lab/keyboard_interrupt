@@ -19,14 +19,14 @@ if __name__=="__main__":
     rospy.init_node('keyboard_interrupt')
     pub = rospy.Publisher('/keyboard_interrupt/key', Key, queue_size = 1)
     
-    rospy.loginfo("Press \"Esc\" key to close this node")
+    rospy.loginfo("Press \"CTRL + C\" to quit")
     key = Key()
     try:
         while not rospy.is_shutdown():
             key.code = int(getKey(), 16)
             key.header.stamp = rospy.Time.now()
             pub.publish(key)
-            if key.code == Key.KEY_ESCAPE:
+            if key.code == 3:
                 break
     
     except Exception as e:
