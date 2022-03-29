@@ -4,11 +4,10 @@ import rospy, binascii
 
 from keyboard_interrupt.msg import Key
 
-import sys, select, termios, tty
+import sys, termios, tty
 
 def getKey():
     tty.setraw(sys.stdin.fileno())
-    select.select([sys.stdin], [], [], 0)
     key = sys.stdin.read(1)
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return binascii.hexlify(bytes(key, 'utf-8'))
